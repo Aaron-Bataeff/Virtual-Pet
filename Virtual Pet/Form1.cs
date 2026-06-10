@@ -11,6 +11,7 @@ namespace VirtualPet
     {
         private PictureBox picPet = null!;
 
+        private Label lblTitle = null!;
         private Label lblName = null!;
         private Label lblMood = null!;
         private Label lblStage = null!;
@@ -19,6 +20,12 @@ namespace VirtualPet
         private Label lblHunger = null!;
         private Label lblEnergy = null!;
         private Label lblHappiness = null!;
+
+        private ProgressBar pbHunger = null!;
+        private ProgressBar pbEnergy = null!;
+        private ProgressBar pbHappiness = null!;
+
+        private GroupBox grpStats = null!;
 
         private Button btnFeed = null!;
         private Button btnPlay = null!;
@@ -58,17 +65,31 @@ namespace VirtualPet
         {
             Text = "Octopus Pet";
 
-            Width = 550;
-            Height = 760;
+            Width = 600;
+            Height = 820;
+            StartPosition = FormStartPosition.CenterScreen;
 
             Font = new Font("Segoe UI", 10);
+
+            lblTitle = new Label
+            {
+                Text = "OCTOPUS PET",
+                Left = 100,
+                Top = 10,
+                Width = 380,
+                Height = 40,
+                Font = new Font("Segoe UI", 18, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+
+            Controls.Add(lblTitle);
 
             picPet = new PictureBox
             {
                 Width = 300,
                 Height = 300,
-                Left = 120,
-                Top = 20,
+                Left = 140,
+                Top = 60,
                 BorderStyle = BorderStyle.FixedSingle,
                 SizeMode = PictureBoxSizeMode.Zoom
             };
@@ -77,69 +98,105 @@ namespace VirtualPet
 
             lblName = new Label
             {
-                Left = 75,
-                Top = 340,
-                Width = 400,
-                Height = 30,
-                TextAlign = ContentAlignment.MiddleCenter,
-                Font = new Font("Segoe UI", 14, FontStyle.Bold)
-            };
-
-            lblMood = new Label
-            {
-                Left = 75,
+                Left = 100,
                 Top = 375,
-                Width = 400,
-                TextAlign = ContentAlignment.MiddleCenter
-            };
-
-            lblStage = new Label
-            {
-                Left = 75,
-                Top = 405,
-                Width = 400,
-                TextAlign = ContentAlignment.MiddleCenter
-            };
-
-            lblAge = new Label
-            {
-                Left = 75,
-                Top = 435,
-                Width = 400,
-                TextAlign = ContentAlignment.MiddleCenter
-            };
-
-            lblHunger = new Label
-            {
-                Left = 75,
-                Top = 485,
-                Width = 400,
-                TextAlign = ContentAlignment.MiddleCenter
-            };
-
-            lblEnergy = new Label
-            {
-                Left = 75,
-                Top = 515,
-                Width = 400,
-                TextAlign = ContentAlignment.MiddleCenter
-            };
-
-            lblHappiness = new Label
-            {
-                Left = 75,
-                Top = 545,
-                Width = 400,
+                Width = 380,
+                Height = 35,
+                Font = new Font("Segoe UI", 16, FontStyle.Bold),
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
             Controls.Add(lblName);
-            Controls.Add(lblMood);
-            Controls.Add(lblStage);
-            Controls.Add(lblAge);
-            Controls.Add(lblHunger);
-            Controls.Add(lblEnergy);
-            Controls.Add(lblHappiness);
+
+            grpStats = new GroupBox
+            {
+                Text = "Pet Status",
+                Left = 75,
+                Top = 420,
+                Width = 450,
+                Height = 220
+            };
+
+            lblMood = new Label
+            {
+                Left = 20,
+                Top = 30,
+                Width = 400
+            };
+
+            lblStage = new Label
+            {
+                Left = 20,
+                Top = 55,
+                Width = 400
+            };
+
+            lblAge = new Label
+            {
+                Left = 20,
+                Top = 80,
+                Width = 400
+            };
+
+            lblHunger = new Label
+            {
+                Left = 20,
+                Top = 115,
+                Width = 90
+            };
+
+            pbHunger = new ProgressBar
+            {
+                Left = 120,
+                Top = 115,
+                Width = 280,
+                Height = 20,
+                Maximum = 100
+            };
+
+            lblEnergy = new Label
+            {
+                Left = 20,
+                Top = 145,
+                Width = 90
+            };
+
+            pbEnergy = new ProgressBar
+            {
+                Left = 120,
+                Top = 145,
+                Width = 280,
+                Height = 20,
+                Maximum = 100
+            };
+
+            lblHappiness = new Label
+            {
+                Left = 20,
+                Top = 175,
+                Width = 90
+            };
+
+            pbHappiness = new ProgressBar
+            {
+                Left = 120,
+                Top = 175,
+                Width = 280,
+                Height = 20,
+                Maximum = 100
+            };
+
+            grpStats.Controls.Add(lblMood);
+            grpStats.Controls.Add(lblStage);
+            grpStats.Controls.Add(lblAge);
+            grpStats.Controls.Add(lblHunger);
+            grpStats.Controls.Add(pbHunger);
+            grpStats.Controls.Add(lblEnergy);
+            grpStats.Controls.Add(pbEnergy);
+            grpStats.Controls.Add(lblHappiness);
+            grpStats.Controls.Add(pbHappiness);
+
+            Controls.Add(grpStats);
 
             btnFeed = new Button
             {
@@ -147,7 +204,7 @@ namespace VirtualPet
                 Width = 120,
                 Height = 40,
                 Left = 40,
-                Top = 600
+                Top = 670
             };
 
             btnPlay = new Button
@@ -155,8 +212,8 @@ namespace VirtualPet
                 Text = "Play",
                 Width = 120,
                 Height = 40,
-                Left = 205,
-                Top = 600
+                Left = 235,
+                Top = 670
             };
 
             btnSleep = new Button
@@ -164,26 +221,26 @@ namespace VirtualPet
                 Text = "Sleep",
                 Width = 120,
                 Height = 40,
-                Left = 370,
-                Top = 600
+                Left = 430,
+                Top = 670
             };
 
             btnSave = new Button
             {
                 Text = "Save",
                 Width = 120,
-                Height = 40,
-                Left = 120,
-                Top = 650
+                Height = 35,
+                Left = 140,
+                Top = 730
             };
 
             btnLoad = new Button
             {
                 Text = "Load",
                 Width = 120,
-                Height = 40,
-                Left = 280,
-                Top = 650
+                Height = 35,
+                Left = 320,
+                Top = 730
             };
 
             btnFeed.Click += BtnFeed_Click;
@@ -205,13 +262,17 @@ namespace VirtualPet
         {
             lblName.Text = pet.Name;
 
-            lblMood.Text = $"Mood: {pet.GetMood()}";
+            lblMood.Text = $"Feeling: {pet.GetMood()}";
             lblStage.Text = $"Stage: {pet.GetStage()}";
             lblAge.Text = $"Age: {pet.Age}";
 
-            lblHunger.Text = $"Hunger: {pet.Hunger}";
-            lblEnergy.Text = $"Energy: {pet.Energy}";
-            lblHappiness.Text = $"Happiness: {pet.Happiness}";
+            lblHunger.Text = $"Hunger ({pet.Hunger})";
+            lblEnergy.Text = $"Energy ({pet.Energy})";
+            lblHappiness.Text = $"Happy ({pet.Happiness})";
+
+            pbHunger.Value = pet.Hunger;
+            pbEnergy.Value = pet.Energy;
+            pbHappiness.Value = pet.Happiness;
 
             if (picPet.Image != null)
             {
@@ -262,9 +323,7 @@ namespace VirtualPet
         private void PetTimer_Tick(object? sender, EventArgs e)
         {
             pet.Hunger = Math.Min(100, pet.Hunger + 5);
-
             pet.Energy = Math.Max(0, pet.Energy - 2);
-
             pet.Happiness = Math.Max(0, pet.Happiness - 1);
 
             if (pet.Hunger >= 80)
