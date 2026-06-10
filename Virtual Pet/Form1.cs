@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Microsoft.VisualBasic;
 using VirtualPet.Models;
 
 namespace VirtualPet
@@ -9,6 +10,7 @@ namespace VirtualPet
     {
         private PictureBox picPet;
 
+        private Label lblName;
         private Label lblMood;
         private Label lblStage;
 
@@ -18,7 +20,17 @@ namespace VirtualPet
         {
             InitializeComponent();
 
-            pet = new Pet("Octo");
+            string petName = Interaction.InputBox(
+                "What would you like to name your pet?",
+                "Name Your Pet",
+                "Octo");
+
+            if (string.IsNullOrWhiteSpace(petName))
+            {
+                petName = "Octo";
+            }
+
+            pet = new Pet(petName);
 
             BuildInterface();
         }
@@ -42,20 +54,28 @@ namespace VirtualPet
 
             Controls.Add(picPet);
 
+            lblName = new Label
+            {
+                Left = 20,
+                Top = 310,
+                Width = 250
+            };
+
             lblMood = new Label
             {
                 Left = 20,
                 Top = 340,
-                Width = 200
+                Width = 250
             };
 
             lblStage = new Label
             {
                 Left = 20,
                 Top = 370,
-                Width = 200
+                Width = 250
             };
 
+            Controls.Add(lblName);
             Controls.Add(lblMood);
             Controls.Add(lblStage);
 
@@ -64,6 +84,7 @@ namespace VirtualPet
 
         private void UpdateDisplay()
         {
+            lblName.Text = $"Name: {pet.Name}";
             lblMood.Text = $"Mood: {pet.GetMood()}";
             lblStage.Text = $"Stage: {pet.GetStage()}";
 
