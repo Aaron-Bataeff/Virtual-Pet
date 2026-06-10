@@ -1,4 +1,4 @@
-﻿namespace Virtual_Pet
+﻿namespace VirtualPet
 {
     partial class Form1
     {

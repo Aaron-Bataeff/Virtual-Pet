@@ -9,4 +9,58 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Images\adult happy.png" />
+    <None Remove="Images\adult hungry.png" />
+    <None Remove="Images\adult sad.png" />
+    <None Remove="Images\adult tired.png" />
+    <None Remove="Images\baby happy.png" />
+    <None Remove="Images\baby hungry.png" />
+    <None Remove="Images\baby sad.png" />
+    <None Remove="Images\baby tired.png" />
+    <None Remove="Images\cthulhu happy.png" />
+    <None Remove="Images\cthulhu hungry.png" />
+    <None Remove="Images\cthulhu sad.png" />
+    <None Remove="Images\cthulhu tired.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Images\adult happy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\adult hungry.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\adult sad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\adult tired.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\baby happy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\baby hungry.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\baby sad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\baby tired.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\cthulhu happy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\cthulhu hungry.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\cthulhu sad.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\cthulhu tired.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
