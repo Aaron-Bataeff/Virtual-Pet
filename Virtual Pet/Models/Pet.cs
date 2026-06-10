@@ -37,14 +37,14 @@
 
         public string GetMood()
         {
-            if (Hunger >= 80)
-                return "hungry";
-
-            if (Energy <= 20)
-                return "tired";
-
             if (Happiness <= 30)
                 return "sad";
+
+            if (Hunger >= 70)
+                return "hungry";
+
+            if (Energy <= 30)
+                return "tired";
 
             return "happy";
         }

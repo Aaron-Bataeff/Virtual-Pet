@@ -221,6 +221,17 @@ namespace VirtualPet
 
             pet.Energy = Math.Max(0, pet.Energy - 2);
 
+            pet.Happiness = Math.Max(0, pet.Happiness - 1);
+
+            if (pet.Hunger >= 80)
+            {
+                pet.Happiness = Math.Max(0, pet.Happiness - 3);
+            }
+            if (pet.Energy <= 20)
+            {
+                pet.Happiness = Math.Max(0, pet.Happiness - 2);
+            }
+
             pet.Age++;
 
             UpdateDisplay();
