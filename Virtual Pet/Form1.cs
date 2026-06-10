@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using VirtualPet.Models;
+using VirtualPet.Services;
 
 namespace VirtualPet
 {
@@ -22,6 +23,8 @@ namespace VirtualPet
         private Button btnFeed = null!;
         private Button btnPlay = null!;
         private Button btnSleep = null!;
+        private Button btnSave = null!;
+        private Button btnLoad = null!;
 
         private System.Windows.Forms.Timer petTimer = null!;
 
@@ -56,7 +59,7 @@ namespace VirtualPet
             Text = "Octopus Pet";
 
             Width = 550;
-            Height = 700;
+            Height = 760;
 
             Font = new Font("Segoe UI", 10);
 
@@ -165,13 +168,35 @@ namespace VirtualPet
                 Top = 600
             };
 
+            btnSave = new Button
+            {
+                Text = "Save",
+                Width = 120,
+                Height = 40,
+                Left = 120,
+                Top = 650
+            };
+
+            btnLoad = new Button
+            {
+                Text = "Load",
+                Width = 120,
+                Height = 40,
+                Left = 280,
+                Top = 650
+            };
+
             btnFeed.Click += BtnFeed_Click;
             btnPlay.Click += BtnPlay_Click;
             btnSleep.Click += BtnSleep_Click;
+            btnSave.Click += BtnSave_Click;
+            btnLoad.Click += BtnLoad_Click;
 
             Controls.Add(btnFeed);
             Controls.Add(btnPlay);
             Controls.Add(btnSleep);
+            Controls.Add(btnSave);
+            Controls.Add(btnLoad);
 
             UpdateDisplay();
         }
@@ -215,6 +240,25 @@ namespace VirtualPet
             UpdateDisplay();
         }
 
+        private void BtnSave_Click(object? sender, EventArgs e)
+        {
+            SaveService.Save(pet);
+            MessageBox.Show("Pet saved!");
+        }
+
+        private void BtnLoad_Click(object? sender, EventArgs e)
+        {
+            Pet? loadedPet = SaveService.Load();
+
+            if (loadedPet != null)
+            {
+                pet = loadedPet;
+                UpdateDisplay();
+
+                MessageBox.Show("Pet loaded!");
+            }
+        }
+
         private void PetTimer_Tick(object? sender, EventArgs e)
         {
             pet.Hunger = Math.Min(100, pet.Hunger + 5);
@@ -227,6 +271,7 @@ namespace VirtualPet
             {
                 pet.Happiness = Math.Max(0, pet.Happiness - 3);
             }
+
             if (pet.Energy <= 20)
             {
                 pet.Happiness = Math.Max(0, pet.Happiness - 2);

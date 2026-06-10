@@ -9,6 +9,11 @@
         public int Energy { get; set; }
         public int Age { get; set; }
 
+        public Pet()
+        {
+            Name = "";
+        }
+
         public Pet(string name)
         {
             Name = name;
