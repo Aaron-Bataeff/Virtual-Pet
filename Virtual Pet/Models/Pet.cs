@@ -51,10 +51,10 @@
 
         public string GetStage()
         {
-            if (Age < 5)
+            if (Age < 10)
                 return "baby";
 
-            if (Age < 10)
+            if (Age < 20)
                 return "adult";
 
             return "cthulhu";

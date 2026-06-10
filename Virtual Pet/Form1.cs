@@ -8,18 +8,22 @@ namespace VirtualPet
 {
     public partial class Form1 : Form
     {
-        private PictureBox picPet;
+        private PictureBox picPet = null!;
 
-        private Label lblName;
-        private Label lblMood;
-        private Label lblStage;
-        private Label lblHunger;
-        private Label lblEnergy;
-        private Label lblHappiness;
+        private Label lblName = null!;
+        private Label lblMood = null!;
+        private Label lblStage = null!;
+        private Label lblAge = null!;
 
-        private Button btnFeed;
-        private Button btnPlay;
-        private Button btnSleep;
+        private Label lblHunger = null!;
+        private Label lblEnergy = null!;
+        private Label lblHappiness = null!;
+
+        private Button btnFeed = null!;
+        private Button btnPlay = null!;
+        private Button btnSleep = null!;
+
+        private System.Windows.Forms.Timer petTimer = null!;
 
         private Pet pet;
 
@@ -39,6 +43,11 @@ namespace VirtualPet
 
             pet = new Pet(petName);
 
+            petTimer = new System.Windows.Forms.Timer();
+            petTimer.Interval = 10000;
+            petTimer.Tick += PetTimer_Tick;
+            petTimer.Start();
+
             BuildInterface();
         }
 
@@ -46,8 +55,8 @@ namespace VirtualPet
         {
             Text = "Octopus Pet";
 
-            Width = 600;
-            Height = 750;
+            Width = 550;
+            Height = 700;
 
             Font = new Font("Segoe UI", 10);
 
@@ -55,7 +64,7 @@ namespace VirtualPet
             {
                 Width = 300,
                 Height = 300,
-                Left = 140,
+                Left = 120,
                 Top = 20,
                 BorderStyle = BorderStyle.FixedSingle,
                 SizeMode = PictureBoxSizeMode.Zoom
@@ -65,7 +74,7 @@ namespace VirtualPet
 
             lblName = new Label
             {
-                Left = 100,
+                Left = 75,
                 Top = 340,
                 Width = 400,
                 Height = 30,
@@ -75,40 +84,48 @@ namespace VirtualPet
 
             lblMood = new Label
             {
-                Left = 100,
-                Top = 380,
+                Left = 75,
+                Top = 375,
                 Width = 400,
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
             lblStage = new Label
             {
-                Left = 100,
-                Top = 410,
+                Left = 75,
+                Top = 405,
+                Width = 400,
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+
+            lblAge = new Label
+            {
+                Left = 75,
+                Top = 435,
                 Width = 400,
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
             lblHunger = new Label
             {
-                Left = 100,
-                Top = 460,
+                Left = 75,
+                Top = 485,
                 Width = 400,
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
             lblEnergy = new Label
             {
-                Left = 100,
-                Top = 490,
+                Left = 75,
+                Top = 515,
                 Width = 400,
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
             lblHappiness = new Label
             {
-                Left = 100,
-                Top = 520,
+                Left = 75,
+                Top = 545,
                 Width = 400,
                 TextAlign = ContentAlignment.MiddleCenter
             };
@@ -116,6 +133,7 @@ namespace VirtualPet
             Controls.Add(lblName);
             Controls.Add(lblMood);
             Controls.Add(lblStage);
+            Controls.Add(lblAge);
             Controls.Add(lblHunger);
             Controls.Add(lblEnergy);
             Controls.Add(lblHappiness);
@@ -125,8 +143,8 @@ namespace VirtualPet
                 Text = "Feed",
                 Width = 120,
                 Height = 40,
-                Left = 70,
-                Top = 590
+                Left = 40,
+                Top = 600
             };
 
             btnPlay = new Button
@@ -134,8 +152,8 @@ namespace VirtualPet
                 Text = "Play",
                 Width = 120,
                 Height = 40,
-                Left = 230,
-                Top = 590
+                Left = 205,
+                Top = 600
             };
 
             btnSleep = new Button
@@ -143,8 +161,8 @@ namespace VirtualPet
                 Text = "Sleep",
                 Width = 120,
                 Height = 40,
-                Left = 390,
-                Top = 590
+                Left = 370,
+                Top = 600
             };
 
             btnFeed.Click += BtnFeed_Click;
@@ -164,6 +182,7 @@ namespace VirtualPet
 
             lblMood.Text = $"Mood: {pet.GetMood()}";
             lblStage.Text = $"Stage: {pet.GetStage()}";
+            lblAge.Text = $"Age: {pet.Age}";
 
             lblHunger.Text = $"Hunger: {pet.Hunger}";
             lblEnergy.Text = $"Energy: {pet.Energy}";
@@ -193,6 +212,17 @@ namespace VirtualPet
         private void BtnSleep_Click(object? sender, EventArgs e)
         {
             pet.Sleep();
+            UpdateDisplay();
+        }
+
+        private void PetTimer_Tick(object? sender, EventArgs e)
+        {
+            pet.Hunger = Math.Min(100, pet.Hunger + 5);
+
+            pet.Energy = Math.Max(0, pet.Energy - 2);
+
+            pet.Age++;
+
             UpdateDisplay();
         }
     }
