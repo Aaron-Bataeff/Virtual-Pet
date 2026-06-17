@@ -1,5 +1,8 @@
 using System;
 using System.Drawing;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text.Json;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using VirtualPet.Models;
@@ -10,6 +13,19 @@ namespace VirtualPet
     public partial class Form1 : Form
     {
         private PictureBox picPet = null!;
+
+        private PictureBox picVisitor = null!;
+
+        private Label lblVisitor = null!;
+
+        private TextBox txtRoomCode = null!;
+
+        private Button btnCreateRoom = null!;
+        private Button btnVisitRoom = null!;
+
+        private static HttpClient client = new HttpClient();
+
+        private const string ApiKey = "?api-key=foo";
 
         private Label lblTitle = null!;
         private Label lblName = null!;
@@ -41,6 +57,15 @@ namespace VirtualPet
         {
             InitializeComponent();
 
+            client.BaseAddress =
+    new Uri("https://virtualpetparty.up.railway.app");
+
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue(
+                    "application/json"));
+
             string petName = Interaction.InputBox(
                 "What would you like to name your pet?",
                 "Name Your Pet",
@@ -65,7 +90,7 @@ namespace VirtualPet
         {
             Text = "Octopus Pet";
 
-            Width = 600;
+            Width = 1050;
             Height = 820;
             StartPosition = FormStartPosition.CenterScreen;
 
@@ -198,6 +223,74 @@ namespace VirtualPet
 
             Controls.Add(grpStats);
 
+            GroupBox grpVisitor = new GroupBox
+            {
+                Text = "Visitor Pet",
+                Left = 575,
+                Top = 60,
+                Width = 400,
+                Height = 580
+            };
+
+            picVisitor = new PictureBox
+            {
+                Left = 50,
+                Top = 35,
+                Width = 300,
+                Height = 300,
+                BorderStyle = BorderStyle.FixedSingle,
+                SizeMode = PictureBoxSizeMode.Zoom
+            };
+
+            lblVisitor = new Label
+            {
+                Left = 50,
+                Top = 350,
+                Width = 300,
+                Height = 30,
+                Text = "No Visitor",
+                TextAlign = ContentAlignment.MiddleCenter,
+                Font = new Font("Segoe UI", 12, FontStyle.Bold)
+            };
+
+            txtRoomCode = new TextBox
+            {
+                Left = 50,
+                Top = 410,
+                Width = 300
+            };
+
+            btnCreateRoom = new Button
+            {
+                Text = "Create Room",
+                Left = 50,
+                Top = 455,
+                Width = 300,
+                Height = 40
+            };
+
+            btnVisitRoom = new Button
+            {
+                Text = "Visit Room",
+                Left = 50,
+                Top = 510,
+                Width = 300,
+                Height = 40
+            };
+
+            btnCreateRoom.Click += BtnCreateRoom_Click;
+            btnVisitRoom.Click += BtnVisitRoom_Click;
+
+
+
+            grpVisitor.Controls.Add(picVisitor);
+            grpVisitor.Controls.Add(lblVisitor);
+            grpVisitor.Controls.Add(txtRoomCode);
+            grpVisitor.Controls.Add(btnCreateRoom);
+            grpVisitor.Controls.Add(btnVisitRoom);
+
+            Controls.Add(grpVisitor);
+
             btnFeed = new Button
             {
                 Text = "Feed",
@@ -283,6 +376,17 @@ namespace VirtualPet
                 $"Images/{pet.GetStage()} {pet.GetMood()}.png");
         }
 
+        private string GetCurrentPetImageBase64()
+        {
+            using MemoryStream ms = new MemoryStream();
+
+            picPet.Image.Save(
+                ms,
+                picPet.Image.RawFormat);
+
+            return Convert.ToBase64String(
+                ms.ToArray());
+        }
         private void BtnFeed_Click(object? sender, EventArgs e)
         {
             pet.Feed();
@@ -320,6 +424,68 @@ namespace VirtualPet
             }
         }
 
+        private async void BtnCreateRoom_Click(
+    object? sender,
+    EventArgs e)
+        {
+            var data = new
+            {
+                name = pet.Name,
+                image = GetCurrentPetImageBase64()
+            };
+
+            HttpResponseMessage response =
+                await client.PostAsJsonAsync(
+                    "/api/room/create" + ApiKey,
+                    data);
+
+            response.EnsureSuccessStatusCode();
+
+            string code =
+                (await response.Content.ReadAsStringAsync())
+                .Trim('"');
+
+            txtRoomCode.Text = code;
+
+            MessageBox.Show(
+                $"Room Code: {code}");
+        }
+
+        private async void BtnVisitRoom_Click(
+    object? sender,
+    EventArgs e)
+        {
+            string roomId = txtRoomCode.Text;
+
+            HttpResponseMessage response =
+                await client.PostAsJsonAsync(
+                    "/api/room/join/" +
+                    roomId +
+                    ApiKey,
+                    new { });
+
+            response.EnsureSuccessStatusCode();
+
+            string json =
+                await response.Content.ReadAsStringAsync();
+
+            RoomResponse room =
+                JsonSerializer.Deserialize<RoomResponse>(
+                    json)!;
+
+            byte[] imageData =
+                Convert.FromBase64String(
+                    room.visitor.image);
+
+            MemoryStream ms =
+                new MemoryStream(imageData);
+
+            picVisitor.Image =
+                Image.FromStream(ms);
+
+            lblVisitor.Text =
+                room.visitor.name;
+        }
         private void PetTimer_Tick(object? sender, EventArgs e)
         {
             pet.Hunger = Math.Min(100, pet.Hunger + 5);
